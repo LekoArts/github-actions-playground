@@ -1,5 +1,5 @@
 module.exports = async ({github, context}) => {
-  console.log({ context })
+  console.log({ context, issue: context.issue })
   // Get a list of all issues created by the PR opener
   // See: https://octokit.github.io/rest.js/#pagination
   const creator = context.payload.sender.login
@@ -20,6 +20,8 @@ module.exports = async ({github, context}) => {
       return // Creator is already a contributor.
     }
   }
+
+  console.log('getting here')
 
   await github.rest.issues.createComment({
     issue_number: context.issue.number,
