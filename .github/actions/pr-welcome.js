@@ -1,4 +1,5 @@
 module.exports = async ({github, context}) => {
+  console.log({ context })
   // Get a list of all issues created by the PR opener
   // See: https://octokit.github.io/rest.js/#pagination
   const creator = context.payload.sender.login
@@ -8,6 +9,7 @@ module.exports = async ({github, context}) => {
     state: 'all'
   })
   const issues = await github.paginate(opts)
+  console.log({ issues })
 
   for (const issue of issues) {
     if (issue.number === context.issue.number) {
