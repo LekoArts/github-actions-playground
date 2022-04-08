@@ -15,22 +15,18 @@ module.exports = async ({ github, context }) => {
   const issues = await github.paginate(opts)
 
   for (const issue of issues) {
-    console.log({ issue, pr: issue.pull_request })
-    if (issue.number === context.issue.number) {
+    const prIsMerged = !!issue.pull_request.merged_at
+    if (prIsMerged) {
+      return
+    } else {
       continue
-    }
-
-    if (issue.pull_request) {
-      return // Creator is already a contributor.
     }
   }
 
-  console.log('getting here')
-
   await github.rest.issues.createComment({
-    issue_number: context.issue.number,
-    owner: context.repo.owner,
-    repo: context.repo.repo,
+    issue_number: number,
+    owner,
+    repo,
     body: `**Welcome**, new contributor!
 
       Please make sure you're read our [contributing guide](CONTRIBUTING.md) and we look forward to reviewing your Pull request shortly ✨`
