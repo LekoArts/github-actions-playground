@@ -1,0 +1,11 @@
+on: pull_request_target
+
+jobs:
+  welcome:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v6
+        with:
+          script: |
+            const script = require('./.github/actions/pr-welcome.js')
+            await script({github, context})
