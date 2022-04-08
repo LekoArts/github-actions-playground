@@ -1,17 +1,21 @@
-module.exports = async ({github, context}) => {
-  console.log({ context, issue: context.issue })
-  // Get a list of all issues created by the PR opener
-  // See: https://octokit.github.io/rest.js/#pagination
+module.exports = async ({ github, context }) => {
+  if (context.payload.action !== 'opened') {
+    console.log('No PR was opened, skipping')
+    return
+  }
+
   const creator = context.payload.sender.login
+  const { owner, repo, number } = context.issue
   const opts = github.rest.issues.listForRepo.endpoint.merge({
-    ...context.issue,
+    owner,
+    repo,
     creator,
     state: 'all'
   })
   const issues = await github.paginate(opts)
-  console.log({ issues })
 
   for (const issue of issues) {
+    console.log({ issue, pr: issue.pull_request })
     if (issue.number === context.issue.number) {
       continue
     }
