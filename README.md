@@ -1,4 +1,4 @@
 # github-actions-playground
 Nothing here, just testing.
 
-Test
+Test 02
